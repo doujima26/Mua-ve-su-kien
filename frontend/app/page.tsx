@@ -1,155 +1,110 @@
-// ĐÁNH DẤU ĐÂY LÀ CLIENT COMPONENT (Vì nó dùng hooks)
 "use client";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-// Đường dẫn import chính xác (giả sử thư mục 'constants' ở thư mục gốc)
-import { contractAddress, contractAbi } from "../constants/contract"; 
+import { contractAddress, contractAbi } from "../constants/contract";
 import { useState } from "react";
 
-// === THÀNH PHẦN NÚT MINT MỚI (Dùng Tailwind CSS) ===
 function MintButton() {
   const { address, isConnected } = useAccount();
   const [txHash, setTxHash] = useState<`0x${string}` | undefined>(undefined);
-
   const { data, isPending, writeContract } = useWriteContract();
   const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash: data });
 
-  const handleMint = async () => {
-    if (!isConnected) {
-      alert("Vui lòng kết nối ví của bạn trước!");
-      return;
-    }
-    
+  const handleMint = () => {
+    if (!isConnected) return;
     writeContract({
       address: contractAddress,
       abi: contractAbi,
       functionName: "mintTicket",
-      args: [address as `0x${string}`], // Phải ép kiểu (cast) 'address'
+      args: [address!],
     });
   };
 
-  const buttonText = (isPending || isLoading) ? "Đang xử lý..." : (isSuccess ? "Đúc thành công!" : "Mint Ticket (Đúc vé)");
+  const getButtonText = () => {
+    if (isPending) return "Đang chờ xác nhận...";
+    if (isLoading) return "Đang xử lý giao dịch...";
+    if (isSuccess) return "Đúc thành công!";
+    return "🎟️ Mua vé ngay";
+  };
 
   return (
-    <div className="mt-8 text-center">
+    <div className="flex flex-col items-center">
       <button
-        disabled={isPending || isLoading}
+        disabled={isPending || isLoading || !isConnected}
         onClick={handleMint}
-        className="px-8 py-4 font-bold text-white transition-all duration-500 bg-gradient-to-r from-green-400 via-blue-500 to-green-400 bg-size-200 hover:bg-pos-100 rounded-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+        className={`px-6 py-3 rounded-xl text-white font-semibold transition-all 
+          ${isPending || isLoading || !isConnected
+            ? "bg-gray-500 cursor-not-allowed"
+            : "bg-orange-500 hover:bg-orange-600 shadow-lg hover:shadow-orange-400/50"
+          }`}
       >
-        {buttonText}
+        {getButtonText()}
       </button>
 
       {isSuccess && (
-        <div className="mt-4 text-green-600">
-          Đúc vé thành công! 
-          <a 
-            href={`https://alfajores.celoscan.io/tx/${data}`} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-blue-500 underline hover:text-blue-700"
-          >
-             Xem giao dịch trên Celoscan
-          </a>
-        </div>
-      )}
-      {(isPending || isLoading) && data && (
-        <div className="mt-4 text-yellow-600">
-          Đang chờ xác nhận giao dịch... 
-          <a 
-            href={`https://alfajores.celoscan.io/tx/${data}`} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-blue-500 underline hover:text-blue-700"
-          >
-            (Xem trên Celoscan)
-          </a>
+        <div className="mt-4 text-center">
+          <p className="text-green-400 font-medium">
+            ✅ Đúc vé thành công!{" "}
+            <a
+              href={`https://celo-sepolia.blockscout.com/tx/${data}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-orange-400 hover:text-orange-300 font-semibold"
+            >
+              Xem trên Celoscan
+            </a>
+          </p>
         </div>
       )}
     </div>
   );
 }
 
-// === TRANG CHỦ ===
 export default function Home() {
   return (
-    <>
-      <main className="flex flex-col items-center justify-between min-h-screen p-24">
-        <div className="z-10 items-center justify-between w-full max-w-5xl font-mono text-sm lg:flex">
-          <p className="fixed top-0 left-0 flex justify-center w-full pt-8 pb-6 border-b border-gray-300 bg-gradient-to-b from-zinc-200 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-            Chào mừng đến với dApp đúc vé NFT!
-          </p>
-          <div className="fixed bottom-0 left-0 flex items-end justify-center w-full h-48 bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-            <ConnectButton />
-          </div>
+    <div
+      className="min-h-screen text-white flex flex-col"
+      style={{
+        backgroundImage: "url('/phenikaa-banner.png')", // 🔸 ĐỔI ĐƯỜNG DẪN ẢNH NỀN Ở ĐÂY
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      {/* Header */}
+      <header className="flex justify-between items-center p-6 bg-black/60 backdrop-blur-sm shadow-md">
+        <h1 className="text-2xl font-bold text-orange-400 drop-shadow-md">
+          Phenikaa University NFT Event 🎓
+        </h1>
+        <div className="bg-white/10 rounded-lg px-3 py-1">
+          <ConnectButton />
         </div>
+      </header>
 
-        <div className="relative flex flex-col place-items-center">
-          <h1 className="text-4xl font-bold text-center lg:text-6xl">
-            My Event Ticket dApp
-          </h1>
-          <p className="mt-4 text-lg text-center text-gray-600 dark:text-gray-400">
-            Kết nối ví Celo Sepolia của bạn và nhấn nút bên dưới để đúc một vé.
+      {/* Main */}
+      <main className="flex flex-1 items-center justify-center p-6">
+        <div className="bg-black/70 rounded-2xl p-8 max-w-3xl text-center shadow-2xl">
+          <img
+            src="/event-banner.png" // 🔸 ĐỔI ẢNH SỰ KIỆN CỦA BẠN (có thể là ảnh trong /public)
+            alt="Sự kiện Chào tân K19"
+            className="rounded-xl mb-6 shadow-lg border border-orange-400/50"
+          />
+          <h2 className="text-3xl font-bold mb-3 text-orange-400">
+            Vé Chào Tân K19 - Đại học Phenikaa
+          </h2>
+          <p className="text-gray-200 mb-8 leading-relaxed">
+            Chào mừng các tân sinh viên K19! Đây là chiếc vé NFT độc nhất của bạn để tham dự sự kiện Chào tân 2025.  
+            Kết nối ví Celo Sepolia của bạn và nhận vé ngay hôm nay!
           </p>
-          
+
           <MintButton />
-          
-        </div>
-
-        <div className="grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-3 lg:text-left">
-          <a
-            href="https://docs.celo.org/developer"
-            className="px-5 py-4 transition-colors border border-transparent rounded-lg group hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className="mb-3 text-2xl font-semibold">
-              Celo Docs{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className="m-0 max-w-[30ch] text-sm opacity-50">
-              Tìm hiểu tài liệu chuyên sâu về Celo.
-            </p>
-          </a>
-
-          <a
-            href={`https://alfajores.celoscan.io/address/${contractAddress}`}
-            className="px-5 py-4 transition-colors border border-transparent rounded-lg group hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className="mb-3 text-2xl font-semibold">
-              Hợp đồng{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className="m-0 max-w-[30ch] text-sm opacity-50">
-              Xem hợp đồng đã xác minh trên Celoscan.
-            </p>
-          </a>
-          
-          <a
-            href="https://github.com/rainbow-me/rainbowkit"
-            className="px-5 py-4 transition-colors border border-transparent rounded-lg group hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className="mb-3 text-2xl font-semibold">
-              RainbowKit{" "}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className="m-0 max-w-[30ch] text-sm opacity-50">
-              Tìm hiểu về thư viện kết nối ví này.
-            </p>
-          </a>
         </div>
       </main>
-    </>
+
+      <footer className="text-center py-4 text-gray-400 text-sm bg-black/60">
+        © 2025 Phenikaa NFT Ticket | Built with ❤️ and Celo
+      </footer>
+    </div>
   );
 }
