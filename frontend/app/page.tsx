@@ -25,7 +25,7 @@ function MintButton() {
     if (isPending) return "Đang chờ xác nhận...";
     if (isLoading) return "Đang xử lý giao dịch...";
     if (isSuccess) return "Đúc thành công!";
-    return "🎟️ Mua vé ngay";
+    return "🎟️ Mua vé";
   };
 
   return (

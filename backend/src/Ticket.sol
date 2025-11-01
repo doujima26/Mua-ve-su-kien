@@ -36,11 +36,14 @@ contract Ticket is ERC721, Ownable {
 
     /**
      * @dev Đây là hàm chính của chúng ta: mintTicket (Đúc Vé)
-     * Nó chỉ có thể được gọi bởi "chủ sở hữu" (nhờ có modifier "onlyOwner").
+     *
+     * ----- ĐÃ SỬA: XÓA `onlyOwner` -----
+     * Bất kỳ ai (public) cũng có thể gọi hàm này.
+     *
      * Nó nhận một tham số là "to" (địa chỉ ví sẽ nhận vé).
      * Nó trả về ID của vé mới được tạo.
      */
-    function mintTicket(address to) public onlyOwner returns (uint256) {
+    function mintTicket(address to) public returns (uint256) { // <-- ĐÃ XÓA `onlyOwner` TỪ ĐÂY
         
         // ----- LOGIC BỘ ĐẾM MỚI -----
         // 1. Tăng bộ đếm lên 1 (lần đầu gọi, nó sẽ từ 0 -> 1)
