@@ -21,60 +21,59 @@ function MintButton() {
   };
 
   const getButtonText = () => {
-    if (!isConnected) return "⚠️ Kết nối ví để mua vé";
-    if (isPending) return "⏳ Đang chờ xác nhận...";
-    if (isLoading) return "🔄 Đang xử lý...";
-    if (isSuccess) return "✅ Đúc thành công!";
-    return "🎟️ Nhận vé NFT ngay";
-  };
-
-  const getButtonClass = () => {
-    if (!isConnected || isPending || isLoading) {
-      return "bg-gray-600 text-gray-300 cursor-not-allowed opacity-70";
-    }
-    if (isSuccess) {
-      return "bg-green-500 text-white cursor-default";
-    }
-    return "bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold hover:from-yellow-300 hover:to-orange-400 shadow-xl hover:shadow-2xl transform hover:-translate-y-1";
+    if (!isConnected) return "Kết nối ví để nhận vé";
+    if (isPending) return "Đang chờ xác nhận...";
+    if (isLoading) return "Đang xử lý...";
+    if (isSuccess) return "Đúc thành công!";
+    return "Nhận vé NFT ngay";
   };
 
   return (
     <div className="flex flex-col items-center space-y-6">
       <motion.button
-        whileHover={isConnected && !isPending && !isLoading && !isSuccess ? { scale: 1.05 } : {}}
-        whileTap={isConnected && !isPending && !isLoading && !isSuccess ? { scale: 0.98 } : {}}
+        whileHover={isConnected && !isPending && !isLoading && !isSuccess ? { scale: 1.06 } : {}}
+        whileTap={isConnected && !isPending && !isLoading && !isSuccess ? { scale: 0.97 } : {}}
         onClick={handleMint}
         disabled={!isConnected || isPending || isLoading || isSuccess}
-        className={`px-12 py-5 rounded-full text-xl font-extrabold tracking-wider transition-all duration-300 flex items-center gap-3 ${getButtonClass()}`}
+        className={`relative px-14 py-6 rounded-2xl text-2xl font-black tracking-wide transition-all duration-300 flex items-center gap-3 overflow-hidden
+          ${!isConnected || isPending || isLoading
+            ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+            : isSuccess
+            ? "bg-emerald-600 text-white"
+            : "bg-gradient-to-r from-amber-500 to-orange-600 text-black shadow-2xl hover:shadow-amber-500/50"
+          }`}
       >
-        <span className="drop-shadow-md">{getButtonText()}</span>
-        {isPending || isLoading ? (
+        <span className="relative z-10 drop-shadow-lg">{getButtonText()}</span>
+        {(isPending || isLoading) && (
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+            className="w-6 h-6 border-3 border-white border-t-transparent rounded-full"
           />
-        ) : null}
+        )}
+        {/* Glow effect */}
+        {isConnected && !isPending && !isLoading && !isSuccess && (
+          <div className="absolute inset-0 bg-white opacity-0 hover:opacity-20 transition-opacity rounded-2xl" />
+        )}
       </motion.button>
 
       {isSuccess && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-green-900/80 backdrop-blur-sm border border-green-400 rounded-xl p-4 max-w-md mx-auto"
+          className="bg-emerald-900/90 backdrop-blur-md border-2 border-emerald-400 rounded-2xl p-5 max-w-lg mx-auto shadow-xl"
         >
-          <p className="text-green-300 font-medium text-lg leading-relaxed">
-            🎉 <strong>Vé NFT đã được đúc thành công!</strong><br />
-            <a
-              href={`https://celo-sepolia.blockscout.com/tx/${data}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block mt-2 text-yellow-400 underline hover:text-yellow-300 font-semibold transition"
-            >
-              Xem giao dịch trên Blockscout →
-            </a>
+          <p className="text-emerald-200 font-bold text-xl text-center">
+            Vé NFT đã được đúc thành công!
           </p>
+          <a
+            href={`https://celo-sepolia.blockscout.com/tx/${data}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block mt-3 text-amber-400 underline hover:text-amber-300 font-semibold text-center"
+          >
+            Xem giao dịch
+          </a>
         </motion.div>
       )}
     </div>
@@ -93,66 +92,64 @@ export default function Home() {
       }}
     >
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80" />
+      <div className="absolute inset-0 bg-black/75" />
 
       {/* Header */}
       <header className="relative z-10 flex justify-between items-center p-5 md:p-8">
-        <motion.div
-          initial={{ x: -50, opacity: 0 }}
+        <motion.h1
+          initial={{ x: -60, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
+          className="text-3xl md:text-5xl font-black"
         >
-          <h1 className="text-2xl md:text-4xl font-black tracking-tight">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 drop-shadow-lg">
-              🎓 Phenikaa NFT Event
-            </span>
-          </h1>
-        </motion.div>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-400 drop-shadow-2xl">
+            Phenikaa NFT Event
+          </span>
+        </motion.h1>
 
         <motion.div
-          initial={{ x: 50, opacity: 0 }}
+          initial={{ x: 60, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
+          className="bg-gradient-to-r from-orange-600 to-amber-500 p-1.5 rounded-full shadow-xl"
         >
-          <div className="bg-gradient-to-r from-orange-500 to-yellow-400 p-1 rounded-full shadow-lg">
-            <div className="bg-black rounded-full px-1 py-1">
-              <ConnectButton
-                accountStatus="address"
-                showBalance={false}
-                chainStatus="icon"
-              />
-            </div>
+          <div className="bg-black/90 rounded-full px-2 py-1.5 backdrop-blur">
+            <ConnectButton
+              accountStatus="address"
+              showBalance={false}
+              chainStatus="icon"
+            />
           </div>
         </motion.div>
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 flex-1 flex items-center justify-center px-6 py-12 md:py-20">
+      <main className="relative z-10 flex-1 flex items-center justify-center px-6 py-16 md:py-24">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="bg-gradient-to-br from-orange-600/95 via-orange-700/95 to-red-800/95 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-2xl border border-yellow-400/30 max-w-3xl w-full"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7 }}
+          className="bg-gradient-to-br from-orange-600/98 via-orange-700/98 to-amber-700/98 backdrop-blur-2xl p-10 md:p-14 rounded-3xl shadow-2xl border-4 border-amber-300/50 max-w-4xl w-full"
         >
           {/* Title */}
-          <h2 className="text-4xl md:text-6xl font-black text-center mb-8 leading-tight">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-orange-100 drop-shadow-2xl">
+          <h2 className="text-5xl md:text-7xl font-black text-center mb-8 leading-tight">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-100 drop-shadow-2xl">
               Chào Tân K19
             </span>
             <br />
-            <span className="text-2xl md:text-3xl text-yellow-100 font-bold">Sự Kiện 2025</span>
+            <span className="text-3xl md:text-4xl text-amber-100 font-bold mt-2 block">
+              Sự Kiện 2025
+            </span>
           </h2>
 
-          {/* Description Box */}
-          <div className="bg-white/10 backdrop-blur-md border border-yellow-300/40 rounded-2xl p-6 md:p-8 mb-10 shadow-inner">
-            <p className="text-lg md:text-xl text-gray-100 leading-relaxed font-medium text-center">
-              🌟 <strong>Chào mừng các tân sinh viên K19!</strong><br />
-              Nhận ngay <span className="text-yellow-300 font-bold">vé NFT độc quyền</span> để tham dự
+          {/* Description Box - NỀN CAM ĐẬM */}
+          <div className="bg-gradient-to-r from-amber-600/95 to-orange-600/95 backdrop-blur-xl border-2 border-amber-300/60 rounded-2xl p-8 md:p-10 mb-12 shadow-xl">
+            <p className="text-xl md:text-2xl text-white font-bold leading-relaxed text-center drop-shadow-lg">
+              Chào mừng các tân sinh viên K19!<br />
+              Nhận ngay <span className="text-yellow-200">vé NFT độc quyền</span> để tham dự
               <br />
-              <span className="text-orange-200 text-xl font-bold">Sự kiện Chào tân 2025</span>
+              <span className="text-amber-100 text-2xl md:text-3xl">Sự kiện Chào tân 2025</span>
             </p>
-            <p className="text-sm md:text-base text-gray-300 mt-4 text-center">
-              Kết nối ví <strong className="text-yellow-400">Celo Sepolia</strong> để nhận vé kỹ thuật số!
+            <p className="text-base md:text-lg text-amber-100 mt-5 text-center font-semibold">
+              Kết nối ví <span className="text-yellow-300">Celo Sepolia</span> để nhận vé kỹ thuật số!
             </p>
           </div>
 
@@ -162,12 +159,12 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 text-center py-5 text-sm md:text-base bg-black/70 backdrop-blur-sm border-t border-orange-500/30">
-        <p>
+      <footer className="relative z-10 text-center py-6 text-sm md:text-base bg-black/80 backdrop-blur-sm border-t-2 border-amber-500/40">
+        <p className="font-bold">
           © 2025{" "}
-          <span className="text-orange-400 font-bold">Phenikaa NFT Ticket</span> | 
-          Built with ❤️ on{" "}
-          <span className="text-yellow-400 font-semibold">Celo Sepolia</span>
+          <span className="text-orange-400">Phenikaa NFT Ticket</span> | 
+          Built with <span className="text-red-500">❤️</span> on{" "}
+          <span className="text-amber-400">Celo Sepolia</span>
         </p>
       </footer>
     </div>
