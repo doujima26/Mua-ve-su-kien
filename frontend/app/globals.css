@@ -1,0 +1,27 @@
+/* Dán vào tệp app/globals.css (thay thế toàn bộ nội dung cũ) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Thêm 2 class này cho hiệu ứng gradient của nút */
+@layer utilities {
+  .bg-size-200 {
+    background-size: 200% auto;
+  }
+  .bg-pos-100 {
+    background-position: right center;
+  }
+}
+
+/* Bạn cũng có thể thêm các styles cơ bản nếu cần 
+  (nhưng Tailwind đã lo việc này) 
+*/
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
