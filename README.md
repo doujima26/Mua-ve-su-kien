@@ -6,7 +6,7 @@ Tên dự án (Project Name):
 
 Vé Sự Kiện K19 Phenikaa (Phenikaa K19 NFT Ticket)
 
-Về chúng tôi :
+Về chúng tôi (Who We Are):
 
 Team: 3
 
