@@ -78,7 +78,6 @@ export default function Home() {
         backgroundAttachment: "fixed",
       }}
     >
-      {/* Overlay mờ để chữ nổi */}
       <div className="absolute inset-0 bg-black/70"></div>
 
       {/* Header */}
@@ -97,19 +96,17 @@ export default function Home() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          className="bg-black/75 border border-yellow-500/50 backdrop-blur-md p-10 rounded-3xl max-w-4xl w-full text-center shadow-[0_0_40px_rgba(255,180,0,0.4)]"
+          className="bg-orange-500/90 border border-yellow-300/60 backdrop-blur-md p-10 rounded-3xl max-w-4xl w-full text-center shadow-[0_0_40px_rgba(255,150,0,0.5)]"
         >
-          {/* Tiêu đề lớn */}
-          <h2 className="text-6xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-500 drop-shadow-[0_0_25px_rgba(255,200,0,0.9)]">
+          <h2 className="text-6xl font-extrabold mb-6 text-white drop-shadow-[0_0_25px_rgba(0,0,0,0.7)]">
             Sự kiện Chào tân K19
           </h2>
 
-          {/* Mô tả */}
-          <div className="bg-black/60 rounded-2xl inline-block px-8 py-6 mb-10 border border-yellow-400/50 shadow-[0_0_20px_rgba(255,200,0,0.3)]">
-            <p className="text-gray-100 text-2xl leading-relaxed max-w-2xl mx-auto font-medium drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+          <div className="bg-orange-400/80 rounded-2xl inline-block px-8 py-6 mb-10 border border-yellow-200 shadow-[0_0_25px_rgba(255,150,0,0.7)]">
+            <p className="text-white text-2xl leading-relaxed max-w-2xl mx-auto font-medium drop-shadow-[0_0_10px_rgba(0,0,0,0.7)]">
               🌟 Chào mừng các tân sinh viên K19!  
               Đây là chiếc vé NFT độc quyền để tham dự  
-              <span className="text-orange-400 font-bold"> Sự kiện Chào tân 2025 </span>.  
+              <span className="text-yellow-100 font-bold"> Sự kiện Chào tân 2025 </span>.  
               Hãy kết nối ví Celo Sepolia của bạn và nhận vé kỹ thuật số ngay hôm nay!
             </p>
           </div>
@@ -118,7 +115,6 @@ export default function Home() {
         </motion.div>
       </main>
 
-      {/* Footer */}
       <footer className="relative z-10 text-center py-6 text-gray-300 text-sm bg-black/60 backdrop-blur-sm border-t border-orange-400/20">
         © 2025 <span className="text-orange-400 font-semibold">Phenikaa NFT Ticket</span>  
         | Built with ❤️ on <span className="text-yellow-400 font-medium">Celo</span>
